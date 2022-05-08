@@ -1,6 +1,24 @@
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewBag.Title = "Home Page";
 }
-<h1>@ViewData["Title"]</h1>
-
-<p>Use this page to detail your site's privacy policy.</p>
+@*<style>
+        .grecaptcha-badge {
+            visibility: hidden;
+        }
+    </style>*@
+<head>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=@TempData["sitekey"]"></script>
+</head>
+<body>
+    <input type="button" class="btn btn-secondary col-sm-2" id="test_verify_score" value="verify_score" onclick="verify_score_click()">
+</body>
+<script>
+    function verify_score_click() {
+        grecaptcha.enterprise.ready(function () {
+            grecaptcha.enterprise.execute('@TempData["sitekey"]', { action: '@TempData["recaptchaAction"]' }).then(function (token) {
+                $.get(`/Home/CreateAssessment?token=${token}&recaptchaSiteKey=@TempData["sitekey"]&recaptchaAction=@TempData["recaptchaAction"]`)
+                    .then((res) => alert(res));
+            });
+        });
+    }
+</script>

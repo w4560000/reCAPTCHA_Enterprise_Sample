@@ -1,8 +1,19 @@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewBag.Title = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+    <script src="https://www.google.com/recaptcha/enterprise.js"></script>
+</head>
+<body>
+    <div class="g-recaptcha"
+         data-sitekey="@TempData["sitekey"]"
+         data-action='@TempData["recaptchaAction"]'
+         data-callback='test_recaptcha'>
+    </div>
+</body>
+<script>
+    function test_recaptcha(token) {
+        $.get(`/Home/CreateAssessment?token=${token}&recaptchaSiteKey=@TempData["sitekey"]&recaptchaAction=@TempData["recaptchaAction"]`)
+            .then((res) => alert(res));
+    }
+</script>
